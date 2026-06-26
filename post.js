@@ -106,12 +106,14 @@ function renderBodyWithHeadings(body) {
     .map((line) => line.trim())
     .filter(Boolean)
     .forEach((line) => {
-      const block = document.createElement(sectionTitles.has(line) ? "h2" : "p");
+      const block = document.createElement("p");
       block.textContent = line;
       if (sectionTitles.has(line)) {
         block.className = "post-section-title";
         block.style.color = "#2d566b";
         block.style.fontWeight = "850";
+        block.style.fontSize = "inherit";
+        block.style.lineHeight = "inherit";
         block.style.margin = "1.25rem 0 0.35rem";
       }
       wrapper.append(block);
