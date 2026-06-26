@@ -90,6 +90,36 @@ function htmlToPlainText(value) {
   return element.textContent.trim();
 }
 
+function renderBodyWithHeadings(body) {
+  const wrapper = document.createElement("div");
+  const sectionTitles = new Set([
+    "Entering the Clinic",
+    "The Problem I Kept Noticing",
+    "Building the AI Fax Triage Tool",
+    "What Worked",
+    "Where It Got Complicated",
+    "Where I See AI Integration In Healthcare Heading",
+  ]);
+
+  htmlToPlainText(body)
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .forEach((line) => {
+      const block = document.createElement(sectionTitles.has(line) ? "h2" : "p");
+      block.textContent = line;
+      if (sectionTitles.has(line)) {
+        block.className = "post-section-title";
+        block.style.color = "#2d566b";
+        block.style.fontWeight = "850";
+        block.style.margin = "1.25rem 0 0.35rem";
+      }
+      wrapper.append(block);
+    });
+
+  return wrapper.innerHTML;
+}
+
 function readTime(body) {
   const words = htmlToPlainText(body).split(/\s+/).filter(Boolean).length;
   return `${Math.max(1, Math.ceil(words / 200))} min read`;
@@ -119,7 +149,7 @@ function renderPost() {
   postArticle.querySelector(".section-kicker").textContent = post.category;
   postArticle.querySelector("h1").textContent = post.title;
   postArticle.querySelector(".post-read-time").textContent = `${formatDate(post.createdAt)} | ${readTime(post.body)}`;
-  postArticle.querySelector(".post-body").innerHTML = sanitizeRichText(post.body);
+  postArticle.querySelector(".post-body").innerHTML = renderBodyWithHeadings(post.body);
 }
 
 renderPost();
